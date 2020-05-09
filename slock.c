@@ -16,6 +16,7 @@
 #include <sys/types.h>
 #include <X11/extensions/Xrandr.h>
 #include <X11/keysym.h>
+#include <X11/XF86keysym.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/XKBlib.h>
@@ -188,6 +189,15 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 			case XK_Caps_Lock:
 				caps = !caps;
 				break;
+      case XF86XK_AudioLowerVolume:
+      case XF86XK_AudioMute:
+      case XF86XK_AudioRaiseVolume:
+      case XF86XK_AudioPlay:
+      case XF86XK_AudioStop:
+      case XF86XK_AudioPrev:
+      case XF86XK_AudioNext:
+				XSendEvent(dpy, locks[0]->root, True, KeyPressMask, &ev);
+        break;
 			default:
 				if (num && !iscntrl((int)buf[0]) &&
 				    (len + num < sizeof(passwd))) {
